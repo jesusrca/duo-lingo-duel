@@ -13,22 +13,31 @@ export function UserProfile() {
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session) {
-        const { data: userData, error } = await supabase.auth.getUser();
-        if (!error && userData) {
-          setUser(userData.user);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log('Supabase Session in UserProfile:', session);
+        
+        if (session) {
+          const { data: userData, error } = await supabase.auth.getUser();
+          console.log('Supabase User Data:', userData, 'Error:', error);
+          
+          if (!error && userData) {
+            setUser(userData.user);
+          }
         }
+        
+        setLoading(false);
+      } catch (error) {
+        console.error('Error getting user:', error);
+        setLoading(false);
       }
-      
-      setLoading(false);
     };
 
     getUser();
     
     // Suscribirse a cambios de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('Auth State Changed in UserProfile:', session);
       setUser(session?.user || null);
     });
 

@@ -12,14 +12,20 @@ const Index = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log('Supabase Session:', session);
+        setIsAuthenticated(!!session);
+      } catch (error) {
+        console.error('Error checking Supabase session:', error);
+      }
     };
 
     checkAuth();
     
     // Suscribirse a cambios de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('Auth State Changed:', session);
       setIsAuthenticated(!!session);
     });
 
