@@ -2,8 +2,9 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Obtén las variables de entorno de Supabase (ya configuradas en el proyecto conectado a Supabase)
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Provide fallback values to avoid the "supabaseUrl is required" error
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project-url.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
 
 console.log('Supabase URL:', supabaseUrl);
 console.log('Supabase Anon Key:', supabaseAnonKey ? 'Key Present' : 'Key Missing');
