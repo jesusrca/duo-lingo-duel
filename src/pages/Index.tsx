@@ -1,23 +1,65 @@
 
 import { LanguageSelector } from "@/components/LanguageSelector"
 import { Leaderboard } from "@/components/Leaderboard"
+import { Header } from "@/components/Header"
+import { useEffect, useState } from "react"
+import { createClientComponentClient } from "@supabase/auth-helpers-react"
+import { useNavigate } from "react-router-dom"
 
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-7xl mx-auto space-y-12">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-gray-900">
-            ¡Aprende idiomas jugando!
-          </h1>
-          <p className="text-xl text-gray-600">
-            Compite con otros jugadores mientras aprendes nuevas palabras
-          </p>
-        </div>
+  const supabase = createClientComponentClient();
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-        <div className="flex flex-col items-center gap-8 md:flex-row md:justify-center md:gap-12">
-          <LanguageSelector />
-          <Leaderboard />
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+
+    checkAuth();
+    
+    // Suscribirse a cambios de autenticación
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <div className="py-12 px-4">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold text-gray-900">
+              ¡Aprende idiomas jugando!
+            </h1>
+            <p className="text-xl text-gray-600">
+              Compite con otros jugadores mientras aprendes nuevas palabras
+            </p>
+          </div>
+
+          {!isAuthenticated ? (
+            <div className="text-center">
+              <p className="text-lg mb-4">Inicia sesión para comenzar a jugar</p>
+              <button 
+                onClick={() => navigate("/auth")}
+                className="bg-[#9b87f5] text-white px-6 py-2 rounded-md hover:bg-[#8b5cf6]"
+              >
+                Iniciar sesión
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-8 md:flex-row md:justify-center md:gap-12">
+              <LanguageSelector />
+              <Leaderboard />
+            </div>
+          )}
         </div>
       </div>
     </div>
