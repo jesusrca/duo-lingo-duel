@@ -8,14 +8,11 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { WaitingRoom } from "./components/WaitingRoom";
 import Auth from "./pages/Auth";
-import { createClientComponentClient } from "@supabase/auth-helpers-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [supabaseClient] = useState(() => createClientComponentClient());
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

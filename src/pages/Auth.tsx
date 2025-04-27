@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { createClientComponentClient } from "@supabase/auth-helpers-react";
+import { supabase } from "@/lib/supabase";
 
 export default function Auth() {
   const [email, setEmail] = useState("");
@@ -14,7 +14,6 @@ export default function Auth() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const supabase = createClientComponentClient();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();

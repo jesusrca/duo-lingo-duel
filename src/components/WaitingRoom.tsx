@@ -5,12 +5,11 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
-import { createClientComponentClient } from "@supabase/auth-helpers-react";
+import { supabase } from "@/lib/supabase";
 
 export function WaitingRoom() {
   const location = useLocation();
   const navigate = useNavigate();
-  const supabase = createClientComponentClient();
   const { nativeLanguage, learningLanguage } = location.state || {};
 
   const [roomCode, setRoomCode] = useState("");
@@ -144,7 +143,7 @@ export function WaitingRoom() {
     };
 
     checkAuth();
-  }, [navigate, supabase]);
+  }, [navigate]);
 
   if (isWaiting) {
     return (

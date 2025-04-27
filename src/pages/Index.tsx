@@ -3,11 +3,10 @@ import { LanguageSelector } from "@/components/LanguageSelector"
 import { Leaderboard } from "@/components/Leaderboard"
 import { Header } from "@/components/Header"
 import { useEffect, useState } from "react"
-import { createClientComponentClient } from "@supabase/auth-helpers-react"
 import { useNavigate } from "react-router-dom"
+import { supabase } from "@/lib/supabase"
 
 const Index = () => {
-  const supabase = createClientComponentClient();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -27,7 +26,7 @@ const Index = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -63,7 +62,7 @@ const Index = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Index
